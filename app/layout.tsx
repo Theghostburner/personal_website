@@ -21,7 +21,7 @@ const plex = IBM_Plex_Mono({
 
 const title = "Sudeep Sharma";
 const description =
-  "Sudeep Sharma is a technical product manager at AbleCredit. Clarion is a side project. Alumnus of IIT Kharagpur and founder of the Computer Graphics Society.";
+  "Sudeep Sharma. Technical product manager. Mechanical engineer from IIT Kharagpur.";
 
 export const metadata: Metadata = {
   title,

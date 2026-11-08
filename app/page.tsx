@@ -1,3 +1,4 @@
+import { Hero } from "@/components/Hero";
 import { work } from "@/lib/work";
 
 const LINKS = {
@@ -103,25 +104,7 @@ export default function Home() {
 
       <main id="top" className="pb-16 md:pb-0">
         <section className="border-b border-ink">
-          <div className="field relative min-h-[78vh] overflow-hidden">
-            <div className="pointer-events-none absolute inset-y-0 left-[12.5%] w-px bg-ink/40" />
-            <div className="pointer-events-none absolute inset-y-0 left-[87.5%] w-px bg-ink/40" />
-            <p className="mono absolute top-4 left-4 text-[10px] tracking-[0.2em] text-paper uppercase">
-              Technical product manager
-            </p>
-            <p className="mono absolute top-4 right-4 hidden text-[10px] tracking-[0.2em] text-paper uppercase sm:block">
-              Bengaluru · IN
-            </p>
-            <div className="absolute inset-x-0 bottom-0 border-t border-ink bg-signal text-paper">
-              <h1 className="display flex w-full items-end justify-between gap-3 px-3 pt-3 pb-2 text-[11vw] leading-[0.82] sm:px-5 sm:text-[7.4vw] lg:text-[6.5rem]">
-                <span>Sudeep</span>
-                <span className="mb-2 hidden text-5xl sm:inline" aria-hidden>
-                  ✦
-                </span>
-                <span>Sharma</span>
-              </h1>
-            </div>
-          </div>
+          <Hero />
         </section>
 
         <section id="about" className="grid-page border-b border-ink">
@@ -129,25 +112,12 @@ export default function Home() {
             <p className="mono text-center text-[11px] tracking-[0.35em] uppercase">About</p>
             <div className="mt-10 space-y-8 text-[1.65rem] leading-snug sm:text-[2rem] sm:leading-[1.25]">
               <p>
-                I am a technical product manager at AbleCredit — tech and product, full-time. The
-                work is GenAI for banking and insurance: onboarding, claims, credit, and collections.
+                I make products. The interesting part is the cut — what stays, what goes, and what
+                a team can actually ship.
               </p>
               <p>
-                <a
-                  href={LINKS.clarion}
-                  className="underline decoration-ink/40 underline-offset-4 hover:text-signal"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Clarion
-                </a>{" "}
-                is a side project, not full-time. It takes signal from the tools engineering teams
-                already use and turns it into next steps they approve.
-              </p>
-              <p>
-                Before AbleCredit: machine learning at Leena AI, Resolv AI as co-founder, full-stack
-                at HealthPlix, and AR/VR at Flam and Inspirit. At IIT Kharagpur I founded the
-                Computer Graphics Society.
+                Mechanical engineer from IIT Kharagpur. I still start things when the room does not
+                exist yet.
               </p>
             </div>
           </div>
