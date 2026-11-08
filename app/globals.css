@@ -1,21 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
-  --color-paper: #f3eee4;
-  --color-paper-2: #ebe4d6;
-  --color-ink: #161310;
-  --color-ink-soft: #3d3832;
-  --color-muted: #6b645b;
-  --color-line: #d9d0c2;
-  --color-accent: #b23a14;
-  --color-pine: #1c433d;
+  --font-sans: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex), ui-monospace, monospace;
+  --color-paper: #f2efe8;
+  --color-ink: #120d0b;
+  --color-signal: #1d4ed8;
+  --color-line: #120d0b;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 4.5rem;
 }
 
 body {
@@ -26,10 +23,40 @@ body {
 }
 
 ::selection {
-  background: #e8c4b4;
-  color: var(--color-ink);
+  background: var(--color-signal);
+  color: var(--color-paper);
 }
 
-.serif {
-  font-family: var(--font-serif);
+.display {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.grid-page {
+  background-image:
+    linear-gradient(to right, rgb(18 13 11 / 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(18 13 11 / 0.12) 1px, transparent 1px);
+  background-size: 12.5% 100%, 100% 4.5rem;
+}
+
+.field {
+  background-color: var(--color-signal);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700' preserveAspectRatio='none'><g fill='none' stroke='%23f2efe8' stroke-width='1.15'><path d='M-20 40 C 80 120, 180 -20, 280 90 S 480 220, 580 80 S 780 -10, 880 110 S 1080 240, 1220 60'/><path d='M-20 90 C 90 10, 190 180, 290 70 S 490 -30, 590 140 S 790 250, 890 50 S 1090 -20, 1220 130'/><path d='M-20 150 C 70 250, 200 40, 300 160 S 500 280, 600 90 S 800 20, 900 190 S 1100 300, 1220 110'/><path d='M-20 210 C 110 80, 210 300, 320 140 S 510 40, 620 220 S 810 340, 920 120 S 1110 30, 1220 200'/><path d='M-20 270 C 80 360, 190 140, 310 250 S 500 380, 610 160 S 800 80, 910 270 S 1100 390, 1220 180'/><path d='M-20 330 C 100 220, 220 420, 330 280 S 520 160, 630 340 S 820 460, 930 240 S 1120 140, 1220 320'/><path d='M-20 390 C 90 500, 200 260, 320 400 S 510 520, 620 280 S 810 200, 920 410 S 1110 530, 1220 300'/><path d='M-20 450 C 120 340, 230 560, 340 420 S 530 300, 640 480 S 830 600, 940 380 S 1130 280, 1220 460'/><path d='M-20 510 C 80 620, 210 380, 330 530 S 520 650, 630 420 S 820 340, 930 540 S 1120 660, 1220 440'/><path d='M-20 570 C 110 470, 240 680, 350 540 S 540 430, 650 590 S 840 710, 950 500 S 1140 400, 1220 580'/><path d='M-20 630 C 90 740, 220 500, 340 650 S 530 770, 640 540 S 830 460, 940 660 S 1130 780, 1220 560'/></g></svg>");
+  background-size: cover;
+  background-position: center;
+}
+
+.hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 7px,
+    rgb(242 239 232 / 0.4) 7px,
+    rgb(242 239 232 / 0.4) 8px
+  );
 }

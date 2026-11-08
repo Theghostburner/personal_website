@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Sudeep Sharma — IIT Kharagpur, founder of Clarion";
+export const alt = "Sudeep Sharma";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -14,20 +14,34 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#161310",
-          color: "#f3eee4",
-          padding: "72px",
+          background: "#1d4ed8",
+          color: "#f2efe8",
+          padding: "56px",
         }}
       >
-        <div style={{ fontSize: 22, letterSpacing: "0.28em", textTransform: "uppercase", opacity: 0.7 }}>
-          IIT Kharagpur · Clarion · Computer Graphics Society
+        <div
+          style={{
+            fontSize: 18,
+            letterSpacing: "0.28em",
+            textTransform: "uppercase",
+            fontFamily: "monospace",
+          }}
+        >
+          Technical product manager · AbleCredit
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 92, letterSpacing: "-0.04em", lineHeight: 0.95 }}>Sudeep Sharma</div>
-          <div style={{ marginTop: 24, fontSize: 28, maxWidth: 820, opacity: 0.82, lineHeight: 1.35 }}>
-            Engineer and founder. Dual degree from IIT Kharagpur. Building Clarion so engineering teams
-            spend less time chasing work.
-          </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            fontSize: 108,
+            lineHeight: 0.85,
+            textTransform: "uppercase",
+            letterSpacing: "-0.05em",
+            fontWeight: 800,
+          }}
+        >
+          <div style={{ display: "flex" }}>Sudeep</div>
+          <div style={{ display: "flex" }}>Sharma</div>
         </div>
       </div>
     ),

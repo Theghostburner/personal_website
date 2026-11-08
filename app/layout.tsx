@@ -1,33 +1,37 @@
 import type { Metadata } from "next";
-import { DM_Sans, Instrument_Serif } from "next/font/google";
+import { Archivo_Black, IBM_Plex_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
 });
 
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
+const archivo = Archivo_Black({
+  variable: "--font-archivo",
   subsets: ["latin"],
   weight: "400",
 });
 
-const title = "Sudeep Sharma | IIT Kharagpur · Founder of Clarion";
+const plex = IBM_Plex_Mono({
+  variable: "--font-plex",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
+const title = "Sudeep Sharma";
 const description =
-  "Sudeep Sharma is an engineer and founder from IIT Kharagpur. He founded the Computer Graphics Society at IIT KGP and is building Clarion for engineering teams.";
+  "Sudeep Sharma is a technical product manager at AbleCredit. Clarion is a side project. Alumnus of IIT Kharagpur and founder of the Computer Graphics Society.";
 
 export const metadata: Metadata = {
   title,
   description,
   keywords: [
     "Sudeep Sharma",
-    "IIT Kharagpur",
+    "AbleCredit",
+    "product manager",
     "Clarion",
-    "Computer Graphics Society",
-    "tryclarion",
-    "engineer",
-    "founder",
+    "IIT Kharagpur",
   ],
   authors: [{ name: "Sudeep Sharma" }],
   creator: "Sudeep Sharma",
@@ -52,7 +56,6 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Sudeep Sharma",
-  url: "https://www.linkedin.com/in/sudeep-sharma-466a41174/",
   sameAs: [
     "https://www.linkedin.com/in/sudeep-sharma-466a41174/",
     "https://github.com/Theghostburner",
@@ -61,13 +64,11 @@ const jsonLd = {
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "Indian Institute of Technology Kharagpur",
-    alternateName: "IIT Kharagpur",
   },
-  jobTitle: "Founder",
+  jobTitle: "Technical Product Manager",
   worksFor: {
     "@type": "Organization",
-    name: "Clarion",
-    url: "https://www.tryclarion.ai",
+    name: "AbleCredit",
   },
   description,
 };
@@ -78,8 +79,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${instrument.variable}`}>
-      <body className="font-sans bg-paper text-ink antialiased">
+    <html
+      lang="en"
+      className={`${newsreader.variable} ${archivo.variable} ${plex.variable}`}
+    >
+      <body className="bg-paper text-ink antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
