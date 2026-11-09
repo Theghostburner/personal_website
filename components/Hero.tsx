@@ -42,8 +42,6 @@ function toPath(pts: Pt[]) {
 const BALLS = 16;
 const GRAVITY = 760;
 const PILE = 5;
-const PILE_LINK = 130;
-const PILE_SPREAD = 260;
 const HEAT_TIME = 2.35;
 const WAVE_SPEED = 680;
 const WAVE_LIFE = 1.7;
@@ -267,30 +265,23 @@ export function Hero() {
         }
       }
 
-      const settled = balls.current.filter((ball) => ball.on && ball.fly === 0 && ball.vx < 14);
-      const parent = settled.map((_, i) => i);
-      const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
-      for (let i = 0; i < settled.length; i++) {
-        for (let j = i + 1; j < settled.length; j++) {
-          const dx = settled[i].x - settled[j].x;
-          const dy = settled[i].y - settled[j].y;
-          if (dx * dx + dy * dy < PILE_LINK * PILE_LINK) parent[find(i)] = find(j);
-        }
-      }
-      const grouped = new Map<number, Ball[]>();
-      settled.forEach((ball, i) => {
-        const key = find(i);
-        const list = grouped.get(key);
-        if (list) list.push(ball);
-        else grouped.set(key, [ball]);
-      });
       const piles: Ball[][] = [];
-      for (const group of grouped.values()) {
-        if (group.length < PILE) continue;
-        const cx = group.reduce((sum, ball) => sum + ball.x, 0) / group.length;
-        const cy = group.reduce((sum, ball) => sum + ball.y, 0) / group.length;
-        const spread = Math.max(...group.map((ball) => Math.hypot(ball.x - cx, ball.y - cy)));
-        if (spread <= PILE_SPREAD) piles.push(group);
+      for (let lane = 0; lane < LINE_COUNT; lane++) {
+        const pack = balls.current
+          .filter((ball) => ball.on && ball.fly === 0 && ball.lane === lane)
+          .sort((a, b) => a.x - b.x);
+        let run: Ball[] = [];
+        const closeRun = () => {
+          if (run.length >= PILE) piles.push(run);
+          run = [];
+        };
+        for (const ball of pack) {
+          const prev = run[run.length - 1];
+          const stacked = prev && ball.x - prev.x <= (ball.r + prev.r) * 1.35;
+          if (prev && !stacked) closeRun();
+          run.push(ball);
+        }
+        closeRun();
       }
       const heating = new Set<Ball>(piles.flat());
       for (const ball of balls.current) {
