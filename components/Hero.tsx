@@ -46,6 +46,9 @@ const HEAT_TIME = 2.35;
 const WAVE_SPEED = 680;
 const WAVE_LIFE = 1.7;
 const WAVE_SLOTS = 3;
+const POP_RADIUS = 88;
+const POP_LIFE = 0.34;
+const POP_SLOTS = 3;
 
 type Ball = {
   lane: number;
@@ -61,6 +64,7 @@ type Ball = {
 };
 
 type Wave = { id: number; x: number; y: number; age: number };
+type Pop = { x: number; y: number; age: number; fresh: boolean };
 
 function yOn(line: Pt[], x: number, hintY: number) {
   let best: number | null = null;
@@ -106,9 +110,11 @@ export function Hero() {
   const pathRefs = useRef<(SVGPathElement | null)[]>([]);
   const ballRefs = useRef<(SVGEllipseElement | null)[]>([]);
   const ringRefs = useRef<(SVGCircleElement | null)[]>([]);
+  const popRefs = useRef<(SVGCircleElement | null)[]>([]);
   const rest = useRef(restLines());
   const current = useRef(restLines());
   const pointer = useRef<Pt | null>(null);
+  const pops = useRef<Pop[]>([]);
   const balls = useRef<Ball[]>(
     Array.from({ length: BALLS }, () => ({
       lane: 0,
@@ -129,6 +135,21 @@ export function Hero() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    const svg = fieldRef.current?.querySelector("svg");
+    const popNodes: SVGCircleElement[] = [];
+    if (svg) {
+      for (let i = 0; i < POP_SLOTS; i++) {
+        const ring = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        ring.setAttribute("fill", "none");
+        ring.setAttribute("stroke", "#f2efe8");
+        ring.setAttribute("stroke-width", "2.5");
+        ring.setAttribute("opacity", "0");
+        svg.appendChild(ring);
+        popNodes.push(ring);
+        popRefs.current[i] = ring;
+      }
+    }
+
     let frame = 0;
     let alive = true;
     let last = performance.now();
@@ -147,6 +168,30 @@ export function Hero() {
       for (let i = waves.length - 1; i >= 0; i--) {
         waves[i].age += dt;
         if (waves[i].age > WAVE_LIFE) waves.splice(i, 1);
+      }
+
+      for (let i = pops.current.length - 1; i >= 0; i--) {
+        const pop = pops.current[i];
+        if (pop.fresh) {
+          pop.fresh = false;
+          for (const ball of balls.current) {
+            if (!ball.on) continue;
+            const dx = ball.x - pop.x;
+            const dy = ball.y - pop.y;
+            const dist = Math.hypot(dx, dy) || 1;
+            if (dist > POP_RADIUS) continue;
+            const falloff = 1 - dist / POP_RADIUS;
+            const force = 240 + 380 * falloff;
+            const nx = dx / dist;
+            const ny = dy / dist;
+            ball.vx += nx * force;
+            if (ball.fly > 0) ball.vy += ny * force;
+            else ball.x += nx * (16 + 18 * falloff);
+            ball.vx = Math.max(-420, Math.min(480, ball.vx));
+          }
+        }
+        pop.age += dt;
+        if (pop.age > POP_LIFE) pops.current.splice(i, 1);
       }
 
       current.current = current.current.map((line, li) =>
@@ -238,7 +283,8 @@ export function Hero() {
 
         const nextX = ball.x + ball.vx * dt;
         const nextGap = gapAt(lines, ball.lane, nextX, here.y);
-        if (blocked || (nextGap != null && nextGap.room < ball.r * 2.05)) {
+        const gapTooTight = blocked || (nextGap != null && nextGap.room < ball.r * 2.05);
+        if (gapTooTight && ball.vx >= 0) {
           ball.x -= Math.max(0, ball.vx) * dt * 0.35;
           if (here.room < ball.r * 1.7) ball.x -= 28 * dt;
         } else {
@@ -362,6 +408,22 @@ export function Hero() {
         ring.setAttribute("opacity", (decay * 0.9).toFixed(2));
       }
 
+      for (let i = 0; i < POP_SLOTS; i++) {
+        const ring = popRefs.current[i];
+        const pop = pops.current[i];
+        if (!ring) continue;
+        if (!pop) {
+          ring.setAttribute("opacity", "0");
+          ring.setAttribute("r", "0");
+          continue;
+        }
+        const fade = Math.max(0, 1 - pop.age / POP_LIFE);
+        ring.setAttribute("cx", pop.x.toFixed(1));
+        ring.setAttribute("cy", pop.y.toFixed(1));
+        ring.setAttribute("r", (10 + (POP_RADIUS - 10) * Math.min(1, pop.age / POP_LIFE)).toFixed(1));
+        ring.setAttribute("opacity", (fade * 0.85).toFixed(2));
+      }
+
       frame = requestAnimationFrame(tick);
     };
 
@@ -369,17 +431,33 @@ export function Hero() {
     return () => {
       alive = false;
       cancelAnimationFrame(frame);
+      popNodes.forEach((ring) => ring.remove());
     };
   }, []);
 
-  function track(event: React.PointerEvent) {
-    if (event.pointerType === "touch" && event.buttons === 0) return;
+  function pointFrom(event: React.PointerEvent): Pt | null {
     const box = fieldRef.current?.getBoundingClientRect();
-    if (!box) return;
-    pointer.current = {
+    if (!box) return null;
+    return {
       x: ((event.clientX - box.left) / box.width) * VB_W,
       y: ((event.clientY - box.top) / box.height) * VB_H,
     };
+  }
+
+  function track(event: React.PointerEvent) {
+    if (event.pointerType === "touch" && event.buttons === 0) return;
+    const point = pointFrom(event);
+    if (point) pointer.current = point;
+  }
+
+  function poke(event: React.PointerEvent) {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    if ((event.target as HTMLElement).closest("button")) return;
+    const point = pointFrom(event);
+    if (!point) return;
+    pointer.current = point;
+    pops.current.push({ ...point, age: 0, fresh: true });
+    if (pops.current.length > POP_SLOTS) pops.current.shift();
   }
 
   return (
@@ -387,6 +465,7 @@ export function Hero() {
       ref={fieldRef}
       className="relative min-h-[78vh] touch-pan-y overflow-hidden bg-signal"
       onPointerMove={track}
+      onPointerDown={poke}
       onPointerLeave={() => {
         pointer.current = null;
       }}
