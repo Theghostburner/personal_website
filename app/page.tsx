@@ -1,4 +1,5 @@
 import { Hero } from "@/components/Hero";
+import { WorkGrid } from "@/components/WorkGrid";
 import { work } from "@/lib/work";
 
 const LINKS = {
@@ -8,22 +9,7 @@ const LINKS = {
   email: "mailto:sudeep@tryclarion.ai",
 };
 
-const toneClass = {
-  ink: "bg-ink text-paper",
-  paper: "bg-paper text-ink",
-  signal: "bg-signal text-paper",
-  hatch: "bg-signal text-paper hatch",
-} as const;
-
-const spanClass = {
-  wide: "sm:col-span-2",
-  tall: "sm:row-span-2 min-h-[22rem] sm:min-h-[32rem]",
-  square: "",
-} as const;
-
 export default function Home() {
-  const total = String(work.length).padStart(2, "0");
-
   return (
     <>
       <a
@@ -34,18 +20,15 @@ export default function Home() {
       </a>
 
       <header className="sticky top-0 z-40 border-b border-ink bg-paper">
-        <div className="grid grid-cols-2 border-ink md:grid-cols-[1fr_auto_1fr]">
-          <a href="#top" className="flex items-center gap-4 px-4 py-3 md:px-5">
-            <span className="display text-2xl leading-none">SS</span>
-            <span className="mono hidden text-[10px] leading-tight tracking-[0.18em] uppercase sm:block">
-              Tech + Product
-              <br />
-              AbleCredit
+        <div className="flex items-center">
+          <a href="#top" className="flex shrink-0 items-center px-4 py-3 md:px-5">
+            <span className="font-display text-[13px] leading-none tracking-tight whitespace-nowrap sm:text-[15px]">
+              Figuring out the Unsolvable
             </span>
           </a>
           <nav
             aria-label="Primary"
-            className="mono hidden items-center justify-center gap-8 border-x border-ink px-8 text-[11px] tracking-[0.22em] uppercase md:flex"
+            className="mono hidden flex-1 items-center justify-center gap-8 border-x border-ink px-8 text-[11px] tracking-[0.22em] uppercase md:flex"
           >
             <a href="#about" className="hover:text-signal">
               About
@@ -145,48 +128,7 @@ export default function Home() {
             </p>
           </div>
 
-          <ul className="grid sm:grid-cols-2 lg:grid-cols-3">
-            {work.map((item, i) => {
-              const index = `${String(i).padStart(4, "0")}/${total}`;
-              const inner = (
-                <>
-                  <div className="flex items-start justify-between gap-4">
-                    <p className="mono text-[10px] tracking-[0.18em] uppercase opacity-70">
-                      {item.kind} · {item.year}
-                    </p>
-                    <p className="mono text-[10px] tracking-[0.16em] uppercase opacity-70">
-                      #{index}
-                    </p>
-                  </div>
-                  <div className="mt-auto">
-                    <h3 className="display text-4xl leading-[0.9] sm:text-5xl">{item.title}</h3>
-                    <p className="mt-4 max-w-md text-base leading-relaxed opacity-80">
-                      {item.note}
-                    </p>
-                  </div>
-                </>
-              );
-
-              const className = `flex min-h-[22rem] flex-col border-b border-ink p-6 sm:min-h-[26rem] sm:border-r ${toneClass[item.tone]} ${spanClass[item.span]}`;
-
-              return (
-                <li key={item.slug} className="contents">
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`${className} transition-[filter] hover:brightness-95`}
-                    >
-                      {inner}
-                    </a>
-                  ) : (
-                    <div className={className}>{inner}</div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <WorkGrid />
         </section>
 
         <section id="contact" className="min-h-[60vh] bg-ink text-paper">

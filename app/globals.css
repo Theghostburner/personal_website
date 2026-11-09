@@ -103,9 +103,135 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .letters-live .glyph,
-  .mark-spin {
+  .mark-spin,
+  .door,
+  .wave-line,
+  .fan-card,
+  .orbit-dot,
+  .flow-bar,
+  .angle-arm,
+  .tile-cell,
+  .plane-card {
     animation: none;
+    transition: none;
   }
+}
+
+.play-host {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+
+.play-doors {
+  transform-style: preserve-3d;
+}
+
+.door {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.2%;
+  background-color: #1d4ed8;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 8px,
+    rgb(242 239 232 / 0.62) 8px,
+    rgb(242 239 232 / 0.62) 9px
+  );
+  transition: transform 0.7s cubic-bezier(0.2, 0.75, 0.2, 1);
+  will-change: transform;
+}
+
+.door-l {
+  left: 0;
+  transform-origin: left center;
+  border-right: 1px solid rgb(242 239 232 / 0.45);
+  transform: rotateY(calc((var(--px, 0.5) - 0.5) * -150deg));
+}
+
+.door-r {
+  right: 0;
+  transform-origin: right center;
+  border-left: 1px solid rgb(242 239 232 / 0.45);
+  transform: rotateY(calc((var(--px, 0.5) - 0.5) * 150deg));
+}
+
+.wave-line {
+  transform: translate(
+    calc((var(--px, 0.5) - 0.5) * (18px + var(--i) * 10px)),
+    calc((var(--py, 0.5) - 0.5) * (10px + var(--i) * 4px))
+  );
+  transition: transform 0.35s ease-out;
+}
+
+.fan-card {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  height: 7.5rem;
+  width: 5rem;
+  border: 1px solid currentColor;
+  opacity: 0.55;
+  transform: translate(-50%, -50%)
+    rotate(calc((var(--i) - 1.5) * 8deg + (var(--px, 0.5) - 0.5) * (14deg + var(--i) * 10deg)))
+    translateX(calc((var(--px, 0.5) - 0.5) * (30px + var(--i) * 28px)));
+  transition: transform 0.35s ease-out;
+}
+
+.orbit-dot {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.55;
+  transform: translate(-50%, -50%)
+    rotate(calc(var(--i) * 45deg + (var(--px, 0.5) - 0.5) * 220deg))
+    translateX(calc(4.5rem + var(--py, 0.5) * 2.5rem));
+  transition: transform 0.35s ease-out;
+}
+
+.flow-bar {
+  height: 0.55rem;
+  width: calc(18% + var(--i) * 8% + (var(--px, 0.5) * (20% + var(--i) * 6%)));
+  background: currentColor;
+  opacity: 0.35;
+  transition: width 0.3s ease-out;
+}
+
+.angle-arm {
+  transform-origin: 100px 120px;
+  transform: rotate(calc((var(--px, 0.5) - 0.5) * 70deg));
+  transition: transform 0.25s ease-out;
+}
+
+.tile-cell {
+  background: currentColor;
+  opacity: 0.22;
+  transform: translate(
+    calc((var(--px, 0.5) - 0.5) * var(--dx) * 22px),
+    calc((var(--py, 0.5) - 0.5) * var(--dy) * 18px)
+  );
+  transition: transform 0.3s ease-out;
+}
+
+.plane-card {
+  width: min(46vw, 16rem);
+  height: min(32vw, 11rem);
+  border: 1px solid currentColor;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 8px,
+    rgb(242 239 232 / 0.35) 8px,
+    rgb(242 239 232 / 0.35) 9px
+  );
+  transform: rotateX(calc((0.5 - var(--py, 0.5)) * 32deg))
+    rotateY(calc((var(--px, 0.5) - 0.5) * 42deg));
+  transition: transform 0.3s ease-out;
 }
 
 .hatch {
